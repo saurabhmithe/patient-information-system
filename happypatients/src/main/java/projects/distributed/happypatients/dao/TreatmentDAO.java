@@ -1,6 +1,8 @@
 package projects.distributed.happypatients.dao;
 
 import com.datastax.driver.core.ResultSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -8,6 +10,8 @@ import java.util.UUID;
 
 @Component
 public class TreatmentDAO extends GenericDAO {
+
+    static final Logger LOG = LoggerFactory.getLogger(TreatmentDAO.class);
 
     public TreatmentDAO() {
         super();

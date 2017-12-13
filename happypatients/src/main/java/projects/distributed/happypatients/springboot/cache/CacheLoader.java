@@ -7,6 +7,7 @@ import projects.distributed.happypatients.springboot.model.Patient;
 import projects.distributed.happypatients.springboot.model.TreatmentInformation;
 import projects.distributed.happypatients.springboot.policy.PolicyEngine;
 import projects.distributed.happypatients.springboot.service.PatientService;
+import projects.distributed.happypatients.springboot.utilities.GeneralUtilities;
 import projects.distributed.happypatients.springboot.utilities.JsonConverter;
 
 import java.util.Calendar;
@@ -38,7 +39,7 @@ public class CacheLoader {
         for (Patient patient : allPatients) {
             List<TreatmentInformation> treatmentInformationList = patient.getTreatmentInformation();
             for (TreatmentInformation information : treatmentInformationList) {
-                if (information.getTreatmentStatus().toString().equals(currentPolicy) && getYear(information.getStartDate()) >= 2000) {
+                if (information.getTreatmentStatus().toString().equals(currentPolicy) && GeneralUtilities.getYear(information.getStartDate()) >= 2000) {
                     jsonObject.put(patient.getId(), jsonConverter.getJsonFromPatientObject(patient));
                     break;
                 }
@@ -46,13 +47,5 @@ public class CacheLoader {
         }
 
         cacheConnector.initializeCacheWithAllRecords(jsonObject.toString());
-    }
-
-    private int getYear(Date date) {
-        Calendar c = Calendar.getInstance();
-        //Set time in milliseconds
-        c.setTime(date);
-        int mYear = c.get(Calendar.YEAR);
-        return mYear;
     }
 }

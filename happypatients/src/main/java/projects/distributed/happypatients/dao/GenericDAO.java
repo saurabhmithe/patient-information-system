@@ -7,7 +7,6 @@ import projects.distributed.happypatients.springboot.utilities.CassandraConnecto
 
 public class GenericDAO {
 
-    static final Logger LOG = LoggerFactory.getLogger(GenericDAO.class);
     static Session session;
 
     public GenericDAO() {
