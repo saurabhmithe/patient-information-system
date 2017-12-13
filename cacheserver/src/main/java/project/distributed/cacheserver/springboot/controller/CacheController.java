@@ -13,6 +13,7 @@ import project.distributed.cacheserver.springboot.service.PatientService;
 public class CacheController {
 
     public static final Logger logger = LoggerFactory.getLogger(CacheController.class);
+
     @Autowired
     PatientService patientService;
 
@@ -21,6 +22,11 @@ public class CacheController {
     @RequestMapping(value = "/patient/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> readPatient(@PathVariable("id") String id) {
         String patient = patientService.readPatient(id);
+        if (patient == null) {
+            logger.info("Not found patient {} in cache.", id);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        logger.info("Found patient {} in cache.", id);
         return new ResponseEntity<String>(patient, HttpStatus.OK);
     }
 
@@ -30,10 +36,13 @@ public class CacheController {
     public ResponseEntity<?> addPatient(@PathVariable("id") String id, @RequestParam(value = "patientjson") String patient) {
         try {
             patientService.addPatient(id, patient);
+            logger.info("Added patient {} to cache.", id);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info("Failed to add patient {} to cache.", id);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     // -------------------Delete Patient---------------------------------------------
@@ -42,10 +51,13 @@ public class CacheController {
     public ResponseEntity<?> removePatient(@PathVariable("id") String id) {
         try {
             patientService.removePatient(id);
+            logger.info("Deleted patient {} from cache.", id);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info("Failed to delete patient {} from cache.", id);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     // -------------------Initialize Cache---------------------------------------------
@@ -54,9 +66,12 @@ public class CacheController {
     public ResponseEntity<?> initializeCache(@RequestParam(value = "allrecords") String allRecords) {
         try {
             patientService.initializeCache(allRecords);
+            logger.info("Successfully initialized cache.");
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info("Failed to initialize cache.");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 }
