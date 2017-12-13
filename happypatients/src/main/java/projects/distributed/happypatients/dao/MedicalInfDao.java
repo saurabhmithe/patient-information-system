@@ -1,10 +1,14 @@
 package projects.distributed.happypatients.dao;
 
 import com.datastax.driver.core.ResultSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 public class MedicalInfDao extends GenericDAO {
+
+    static final Logger LOG = LoggerFactory.getLogger(MedicalInfDao.class);
 
     public MedicalInfDao() {
         super();
