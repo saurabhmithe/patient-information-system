@@ -71,7 +71,6 @@ public class TreatmentInformationServiceImpl implements TreatmentInformationServ
 
     @Override
     public List<TreatmentInformation> getTreatmentInformation(String id) {
-        LOG.info("Getting treatment information for patient {}.", id);
         List<TreatmentInformation> treatmentInformations = new ArrayList<>();
         ResultSet results = treatmentDAO.getPatientsTreatment(UUID.fromString(id));
         for (Row row : results) {

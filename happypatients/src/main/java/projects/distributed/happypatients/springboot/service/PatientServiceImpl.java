@@ -59,13 +59,11 @@ public class PatientServiceImpl implements PatientService {
      */
     @Override
     public Patient findPatientById(String id) {
-        LOG.info("Searching for patient with id {} in the cache.", id);
         // Check if patient is in the cache
         Patient patient = cacheConnector.getPatientFromCache(id);
 
         // Get patient from database if not found in cache
         if (patient == null) {
-            LOG.info("Patient not found in the cache. Searching in the database.");
             patient = patientConverter.convert(patientDAO.getPatient(UUID.fromString(id)).one());
             // When we fetch patient, we get just the basic information.
             // We add treatment information to the object before it is returned to the user.
@@ -73,8 +71,6 @@ public class PatientServiceImpl implements PatientService {
                 LOG.info("Found patient in the database.");
                 patient.setTreatments(treatmentService.getTreatmentInformation(id));
             }
-        } else {
-            LOG.info("Found patient in the cache.");
         }
 
         return patient;

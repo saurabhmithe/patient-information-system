@@ -3,9 +3,11 @@ package projects.distributed.happypatients.springboot.cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import projects.distributed.happypatients.server.ServerDetails;
@@ -22,7 +24,7 @@ public class CacheConnector {
     JsonConverter jsonConverter;
 
     public Patient getPatientFromCache(String id) {
-        LOG.info("Getting patient {} from cache.", id);
+        LOG.info("Searching patient {} in the cache.", id);
         try {
             RestTemplate restTemplate = new RestTemplate();
             String patient = restTemplate.getForObject(ServerDetails.CACHE_SERVER + "/cache/patient/" + id, String.class);
@@ -30,6 +32,12 @@ public class CacheConnector {
                 Patient patientObject = jsonConverter.getPatientObjectFromJson(patient);
                 LOG.info("Get patient {} from cache successful.", id);
                 return patientObject;
+            } else {
+                LOG.info("Not found patient {} from cache successful.", id);
+            }
+        } catch (HttpClientErrorException ex)   {
+            if (ex.getStatusCode() != HttpStatus.NOT_FOUND) {
+                LOG.info("Patient {} not found.", id);
             }
         } catch (ResourceAccessException e) {
             LOG.info("Get patient {} from cache failed.", id);

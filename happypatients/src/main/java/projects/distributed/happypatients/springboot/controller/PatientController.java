@@ -41,7 +41,6 @@ public class PatientController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getPatient(@PathVariable("id") String id) {
-        logger.info("Fetching Patient with id {}", id);
         Patient patient = patientService.findPatientById(id);
         if (patient == null) {
             logger.error("Patient with id {} not found.", id);
