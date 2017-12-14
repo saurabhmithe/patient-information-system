@@ -50,10 +50,13 @@ public class CacheController {
     @RequestMapping(value = "/patient/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removePatient(@PathVariable("id") String id) {
         try {
-            String result = patientService.removePatient(id);
-            if(result != null)
+            if(patientService.removePatient(id)) {
                 logger.info("Deleted patient {} from cache.", id);
-            return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                logger.info("Delete patient {} from cache failed.", id);
+                return new ResponseEntity(HttpStatus.OK);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.info("Failed to delete patient {} from cache.", id);
