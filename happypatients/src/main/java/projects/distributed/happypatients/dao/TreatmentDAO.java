@@ -51,7 +51,7 @@ public class TreatmentDAO extends GenericDAO {
         try {
 
             session.execute("UPDATE treatment set diagnosis='" + diagnosis + "', doctor='" + doctor + "',"
-                    + "enddate=" + enddate.getTime() + ",report='" + report + "',startdate=" + startdate.getTime() + ",status='" + status + "' where pid=" + id + " and medicalcondition='" + medicalCond + "'");
+                    + "enddate=" + enddate.getTime() + ",report='" + report + "',status='" + status + "' where pid=" + id + " and medicalcondition='" + medicalCond + "' and startdate=" + startdate.getTime());
 
             return true;
         } catch (Exception e) {

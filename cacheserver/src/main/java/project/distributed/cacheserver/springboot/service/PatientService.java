@@ -21,7 +21,9 @@ public class PatientService {
 
     public String removePatient(String id) {
         IMap<String, String> map = Hazelcast.getHazelcastInstanceByName(Constants.INSTANCE_NAME).getMap(Constants.MAP);
-        return map.remove(map.get(id));
+        if(map.containsKey(id))
+            return map.remove(map.get(id));
+        return null;
     }
 
     public boolean initializeCache(String allRecords) {
@@ -32,6 +34,11 @@ public class PatientService {
             map.put(key, jsonObject.getString(key));
         }
         return true;
+    }
+
+    public void clearCache() {
+        IMap<String, String> map = Hazelcast.getHazelcastInstanceByName(Constants.INSTANCE_NAME).getMap(Constants.MAP);
+        map.clear();
     }
 
 }

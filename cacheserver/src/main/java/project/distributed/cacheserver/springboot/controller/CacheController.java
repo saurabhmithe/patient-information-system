@@ -50,8 +50,9 @@ public class CacheController {
     @RequestMapping(value = "/patient/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removePatient(@PathVariable("id") String id) {
         try {
-            patientService.removePatient(id);
-            logger.info("Deleted patient {} from cache.", id);
+            String result = patientService.removePatient(id);
+            if(result != null)
+                logger.info("Deleted patient {} from cache.", id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,6 +66,7 @@ public class CacheController {
     @RequestMapping(value = "/initialize/", method = RequestMethod.POST)
     public ResponseEntity<?> initializeCache(@RequestParam(value = "allrecords") String allRecords) {
         try {
+            patientService.clearCache();
             patientService.initializeCache(allRecords);
             logger.info("Successfully initialized cache.");
             return new ResponseEntity(HttpStatus.OK);
