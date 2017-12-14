@@ -1,0 +1,236 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Happy Hospital",
+		"_postman_id": "b533b58c-d1ec-64e0-2b32-968348942541",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Patient",
+			"description": "",
+			"item": [
+				{
+					"name": "getPatients",
+					"request": {
+						"url": "10.0.0.12:8080/patient/",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "create Patient",
+					"request": {
+						"url": "10.0.0.12:8080/patient/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\":\"Shaz\",\n\"phoneNumber\":9029641947,\n\"dateOfBirth\":\"2012-04-23T18:25:43.511Z\",\n\"address\":\"754 The Alameda, San Jose\",\n\"bldGroup\":\"AB+\",\n\"height\":5.8,\n\"weight\":70\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "delete paatient",
+					"request": {
+						"url": "10.0.0.12:8080/patient/191627e0-deec-11e7-aa93-7dad201a6e0d",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": "change id"
+					},
+					"response": []
+				},
+				{
+					"name": "update Patient",
+					"request": {
+						"url": "10.0.0.12:8080/patient/d5a8e2c0-deed-11e7-a966-3daee6191929",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"id\": \"d5a8e2c0-deed-11e7-a966-3daee6191929\",\n\"name\":\"Shaggy\",\n\"phoneNumber\":9029641941,\n\"dateOfBirth\":\"2012-04-12T18:25:43.511Z\",\n\"address\":\"754 The Alameda, San Jose\",\n\"bldGroup\":\"AB+\",\n\"height\":5.8,\n\"weight\":70\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Treatment",
+			"description": "",
+			"item": [
+				{
+					"name": "create treatment",
+					"request": {
+						"url": "10.0.0.12:8080/treatment/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"patientId\":\"d5a8e2c0-deed-11e7-a966-3daee6191929\",\n\"treatmentStatus\":\"ICU\",\n\"doctorName\":\"Dr. Watson\",\n\"report\":\"High Sugar, Low BP\",\n\"diagnosis\":\"FLU\",\n\"medicalCondition\":\"VIRAL\",\n\"startDate\":\"2012-04-23T18:25:43.511Z\",\n\"endDate\":\"2012-04-24T18:25:43.511Z\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "get treatment",
+					"request": {
+						"url": "10.0.0.12:8080/treatment/d5a8e2c0-deed-11e7-a966-3daee6191929",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "delete treatment with medical condition",
+					"request": {
+						"url": "10.0.0.12:8080/treatment/d5a8e2c0-deed-11e7-a966-3daee6191929/VIRAL",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": "change id"
+					},
+					"response": []
+				},
+				{
+					"name": "delete all treatment of a patient",
+					"request": {
+						"url": "10.0.0.12:8080/treatment/d5a8e2c0-deed-11e7-a966-3daee6191929",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": "change id"
+					},
+					"response": []
+				},
+				{
+					"name": "update patient treatment",
+					"request": {
+						"url": "10.0.0.12:8080/treatment/",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"patientId\":\"d5a8e2c0-deed-11e7-a966-3daee6191929\",\n\"treatmentStatus\":\"NORMAL\",\n\"doctorName\":\"Dr. House\",\n\"report\":\"High Sugar, High BP\",\n\"diagnosis\":\"FLU\",\n\"medicalCondition\":\"VIRAL\",\n\"startDate\":\"2012-04-23T18:25:43.511Z\",\n\"endDate\":\"2012-04-24T18:25:43.511Z\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cache Server",
+			"description": "",
+			"item": [
+				{
+					"name": "Get patient from cache",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Store patient in cache",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove patient from cache",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Initialize Cache",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policy Server",
+			"description": "",
+			"item": [
+				{
+					"name": "Retrieve Policy",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Provision Policy",
+					"request": {
+						"url": "",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
