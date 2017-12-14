@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5927ec1-f38e-4237-8669-bc1762c6f782" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/../cacheserver/src/main/java/project/distributed/cacheserver/springboot/controller/CacheController.java" afterPath="$PROJECT_DIR$/../cacheserver/src/main/java/project/distributed/cacheserver/springboot/controller/CacheController.java" />
-      <change beforePath="$PROJECT_DIR$/../cacheserver/src/main/java/project/distributed/cacheserver/springboot/service/PatientService.java" afterPath="$PROJECT_DIR$/../cacheserver/src/main/java/project/distributed/cacheserver/springboot/service/PatientService.java" />
+      <change beforePath="$PROJECT_DIR$/../happypatients/src/main/java/projects/distributed/happypatients/server/ServerDetails.java" afterPath="$PROJECT_DIR$/../happypatients/src/main/java/projects/distributed/happypatients/server/ServerDetails.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
