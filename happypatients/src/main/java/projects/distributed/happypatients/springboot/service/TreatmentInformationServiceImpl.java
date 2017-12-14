@@ -58,13 +58,7 @@ public class TreatmentInformationServiceImpl implements TreatmentInformationServ
             if (patient != null) {
                 patient.setTreatments(getTreatmentInformation(treatmentInformation.getPatientId()));
                 LOG.info("Treatment information updated in patient record.");
-            }
-
-            String currentPolicy = policyEngine.retrievePolicy();
-            cacheConnector.removePatientFromCache(patient.getId());
-            if (treatmentInformation.getTreatmentStatus().toString().equals(currentPolicy) && GeneralUtilities.getYear(treatmentInformation.getStartDate()) >= 2000) {
-                LOG.info("Treatment information makes patient eligible for caching.");
-                cacheConnector.savePatientToCache(patient.getId(), patient);
+                savePatientToCache(patient);
             }
         }
         return isSuccess;
@@ -87,7 +81,9 @@ public class TreatmentInformationServiceImpl implements TreatmentInformationServ
         cacheConnector.removePatientFromCache(id);
         if (isSuccess) {
             LOG.info("Delete treatment information in database successful.");
-            savePatientToCache(id);
+            Patient patient = patientConverter.convert(patientDAO.getPatient(UUID.fromString(id)).one());
+            patient.setTreatments(getTreatmentInformation(id));
+            savePatientToCache(patient);
         }
 
         return isSuccess;
@@ -100,7 +96,9 @@ public class TreatmentInformationServiceImpl implements TreatmentInformationServ
         cacheConnector.removePatientFromCache(id);
         if (isSuccess) {
             LOG.info("Delete treatment information in database successful.");
-            savePatientToCache(id);
+            Patient patient = patientConverter.convert(patientDAO.getPatient(UUID.fromString(id)).one());
+            patient.setTreatments(getTreatmentInformation(id));
+            savePatientToCache(patient);
         }
 
         return isSuccess;
@@ -116,26 +114,28 @@ public class TreatmentInformationServiceImpl implements TreatmentInformationServ
                 treatmentInformation.getTreatmentStatus().toString());
 
         if (isSuccess) {
-            String currentPolicy = policyEngine.retrievePolicy();
-            cacheConnector.removePatientFromCache(treatmentInformation.getPatientId());
-            if (treatmentInformation.getTreatmentStatus().toString().equals(currentPolicy) && GeneralUtilities.getYear(treatmentInformation.getStartDate()) >= 2000) {
-                cacheConnector.removePatientFromCache(treatmentInformation.getPatientId());
-                LOG.info("Update treatment information in database successful.");
-                savePatientToCache(treatmentInformation.getPatientId());
-            }
+        	Patient patient = patientConverter.convert(patientDAO.getPatient(UUID.fromString(treatmentInformation.getPatientId())).one());
+        	patient.setTreatments(getTreatmentInformation(treatmentInformation.getPatientId()));
+            savePatientToCache(patient);
         }
         return isSuccess;
     }
 
-    private void savePatientToCache(String id) {
-        if (cacheConnector.getPatientFromCache(id) != null) {
-            LOG.info("Patient information found in cache.");
-            Patient patient = patientConverter.convert(patientDAO.getPatient(UUID.fromString(id)).one());
-            if (patient != null) {
-                patient.setTreatments(getTreatmentInformation(id));
-            }
-            cacheConnector.savePatientToCache(id, patient);
-        }
+    private void savePatientToCache(Patient patient) {
+    	cacheConnector.removePatientFromCache(patient.getId());
+    	if(isPatientEligibleToBeCached(patient)) {
+    		cacheConnector.savePatientToCache(patient.getId(), patient);
+    	}
+    }
+    
+    public boolean isPatientEligibleToBeCached(Patient patient) {
+    	String currentPolicy = policyEngine.retrievePolicy();
+    	for(TreatmentInformation treatmentInformation:patient.getTreatmentInformation()) {
+    		if (treatmentInformation.getTreatmentStatus().toString().equals(currentPolicy) && GeneralUtilities.getYear(treatmentInformation.getStartDate()) >= 2000) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
 }

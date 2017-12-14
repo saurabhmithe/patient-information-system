@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import projects.distributed.happypatients.HappypatientsApplication;
 import projects.distributed.happypatients.springboot.model.Patient;
 import projects.distributed.happypatients.springboot.model.TreatmentInformation;
 import projects.distributed.happypatients.springboot.service.TreatmentInformationService;
 
 import java.util.List;
+
+import javax.jms.JMSException;
 
 @RestController
 @RequestMapping("/treatment")
@@ -26,8 +30,14 @@ public class TreatmentInfoController {
     public ResponseEntity<?> createTreatment(@RequestBody TreatmentInformation treatmentInformation) {
         LOG.info("Creating Patient's treatment");
 
-        if (treatmentService.addTreatmentInformation(treatmentInformation))
+        if (treatmentService.addTreatmentInformation(treatmentInformation)) {
+	        try {
+	            HappypatientsApplication.producer.sendMessage(treatmentInformation.getPatientId(), "Treatment Information Adition");
+	        } catch (JMSException e) {
+	            LOG.error(e.getMessage());
+	        }
             return new ResponseEntity<String>(HttpStatus.OK);
+        }
         else
             return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -47,8 +57,14 @@ public class TreatmentInfoController {
     public ResponseEntity<?> deleteAllTreatment(@PathVariable("id") String id) {
         LOG.info("Fetching & Deleting Patient's treatment with id {}", id);
 
-        if (treatmentService.deletePatientTreatment(id))
-            return new ResponseEntity<Patient>(HttpStatus.OK);
+        if (treatmentService.deletePatientTreatment(id)) {
+        	try {
+                HappypatientsApplication.producer.sendMessage(id, "Treatment Information Deletion");
+            } catch (JMSException e) {
+                LOG.error(e.getMessage());
+            }
+        	return new ResponseEntity<Patient>(HttpStatus.OK);
+        }
         else
             return new ResponseEntity<Patient>(HttpStatus.NO_CONTENT);
     }
@@ -59,8 +75,14 @@ public class TreatmentInfoController {
     public ResponseEntity<?> deleteTreatment(@PathVariable("id") String id, @PathVariable("medicalCond") String medicalCond) {
         LOG.info("Fetching & Deleting Patient's treatment with id {}", id);
 
-        if (treatmentService.deletePatientTreatment(id, medicalCond))
+        if (treatmentService.deletePatientTreatment(id, medicalCond)) {
+        	try {
+                HappypatientsApplication.producer.sendMessage(id, "Treatment Information Deletion");
+            } catch (JMSException e) {
+                LOG.error(e.getMessage());
+            }
             return new ResponseEntity<Patient>(HttpStatus.OK);
+        }
         else
             return new ResponseEntity<Patient>(HttpStatus.NO_CONTENT);
     }
@@ -70,8 +92,14 @@ public class TreatmentInfoController {
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     public ResponseEntity<?> updatePatient(@RequestBody TreatmentInformation treatmentInformation) {
         LOG.info("Updating Patient Treatment with id {}", treatmentInformation.getPatientId());
-        if (treatmentService.updateTreatment(treatmentInformation))
+        if (treatmentService.updateTreatment(treatmentInformation)) {
+        	try {
+                HappypatientsApplication.producer.sendMessage(treatmentInformation.getPatientId(), "Treatment Information Update");
+            } catch (JMSException e) {
+                LOG.error(e.getMessage());
+            }
             return new ResponseEntity<Patient>(HttpStatus.OK);
+        }
         else
             return new ResponseEntity<Patient>(HttpStatus.NOT_ACCEPTABLE);
     }
